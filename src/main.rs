@@ -56,12 +56,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .interact()?;
     println!("You have selected: {}", items[selection]);
 
-    let mut storage = storage::Storage::new(&filename)?;
-
     match items[selection] {
-        Operation::Search => search(storage),
-        Operation::Create => create(&mut storage),
-        Operation::Update => update(&mut storage),
-        Operation::Remove => remove(&mut storage),
+        Operation::Search => search(&filename),
+        Operation::Create => create(&filename),
+        Operation::Update => update(&filename),
+        Operation::Remove => remove(&filename),
     }
 }
