@@ -1,5 +1,5 @@
 use std::{
-    fs::{remove_file, rename, File, OpenOptions},
+    fs::{remove_file, rename, OpenOptions},
     io::{self, BufReader},
 };
 

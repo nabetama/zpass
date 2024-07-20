@@ -18,3 +18,13 @@ impl Item {
         }
     }
 }
+
+impl std::fmt::Display for Item {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Title: {}, Username: {}, Password: {} Website URL: {}",
+            self.title, self.username, self.password, self.website_url
+        )
+    }
+}

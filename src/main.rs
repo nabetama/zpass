@@ -1,10 +1,12 @@
 mod cmd_create;
+mod cmd_search;
 mod item;
 mod storage;
 
 use dialoguer::{theme::ColorfulTheme, Select};
 
 use cmd_create::create;
+use cmd_search::search;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
@@ -19,7 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("You have selected: {}", items[selection]);
 
     match items[selection] {
-        "search" => unimplemented!(),
+        "search" => search(),
         "create" => create(),
         "update" => unimplemented!(),
         "delete" => unimplemented!(),
