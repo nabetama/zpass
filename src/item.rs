@@ -9,12 +9,12 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(title: String, username: String, password: String, website_url: String) -> Self {
+    pub fn new(title: &str, username: &str, password: &str, website_url: &str) -> Self {
         Self {
-            title,
-            username,
-            password,
-            website_url,
+            title: title.to_string(),
+            username: username.to_string(),
+            password: password.to_string(),
+            website_url: website_url.to_string(),
         }
     }
 }

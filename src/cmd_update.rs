@@ -14,12 +14,12 @@ pub fn update() -> Result<(), Box<dyn std::error::Error>> {
 
     let item = &storage.items[index];
 
-    let mut new_item = Item {
-        title: item.title.clone(),
-        username: item.username.clone(),
-        password: item.password.clone(),
-        website_url: item.website_url.clone(),
-    };
+    let mut new_item = Item::new(
+        &item.title,
+        &item.username,
+        &item.password,
+        &item.website_url,
+    );
 
     let update_fields = MultiSelect::with_theme(&theme)
         .with_prompt("Which fields would you like to update?: ")

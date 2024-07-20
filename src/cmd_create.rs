@@ -33,7 +33,7 @@ pub fn create() -> Result<(), Box<dyn std::error::Error>> {
         .interact_text()?;
 
     let mut storage = storage::Storage::new()?;
-    storage.add_item(Item::new(title, username, password, website_url));
+    storage.add_item(Item::new(&title, &username, &password, &website_url));
     storage.save()?;
 
     Ok(())
