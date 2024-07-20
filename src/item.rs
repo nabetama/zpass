@@ -1,3 +1,4 @@
+use chrono::Local;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -6,6 +7,7 @@ pub struct Item {
     pub username: String,
     pub password: String,
     pub website_url: String,
+    pub updated_at: Option<String>,
 }
 
 impl Item {
@@ -15,6 +17,7 @@ impl Item {
             username: username.to_string(),
             password: password.to_string(),
             website_url: website_url.to_string(),
+            updated_at: Some(Local::now().format("%Y-%m-%d %H:%M:%S").to_string()),
         }
     }
 }

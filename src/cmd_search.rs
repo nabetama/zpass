@@ -16,11 +16,12 @@ pub fn search(filename: &str) -> Result<(), Box<dyn std::error::Error>> {
     let item = &storage.items[selection];
 
     println!(
-        "Title: {}\nUsername: {}\nPassword: {}\nWebsite URL: {}",
+        "Title: {}\nUsername: {}\nPassword: {}\nWebsite URL: {}\nUpdated at: {}",
         item.title,
         style(item.username.to_string()).bold().green(),
-        style(item.password.to_string()).bold().red(),
+        style(item.password.to_string()).bold().magenta(),
         item.website_url,
+        item.updated_at.as_ref().unwrap_or(&"N/A".to_string())
     );
 
     Ok(())

@@ -14,12 +14,10 @@ pub fn update(filename: &str) -> Result<(), Box<dyn std::error::Error>> {
 
     let item = &storage.items[index];
 
-    let mut new_item = Item::new(
-        &item.title,
-        &item.username,
-        &item.password,
-        &item.website_url,
-    );
+    let mut title = String::new();
+    let mut username = String::new();
+    let mut password = String::new();
+    let mut website_url = String::new();
 
     let update_fields = MultiSelect::with_theme(&theme)
         .with_prompt("Which fields would you like to update?: ")
@@ -30,30 +28,27 @@ pub fn update(filename: &str) -> Result<(), Box<dyn std::error::Error>> {
     for field in update_fields {
         match field {
             0 => {
-                let title = Input::<String>::with_theme(&theme)
+                title = Input::<String>::with_theme(&theme)
                     .with_prompt("Enter item title")
                     .allow_empty(false)
                     .default(item.title.to_string())
                     .interact_text()?;
-                new_item.title = title;
             }
             1 => {
-                let username = Input::<String>::with_theme(&theme)
+                username = Input::<String>::with_theme(&theme)
                     .with_prompt("Enter your username ")
                     .allow_empty(true)
                     .interact_text()?;
-                new_item.username = username;
             }
             2 => {
-                let password = Password::with_theme(&theme)
+                password = Password::with_theme(&theme)
                     .with_prompt("Password")
                     .with_confirmation("Repeat password", "Error: the passwords do not match.")
                     .allow_empty_password(true)
                     .interact()?;
-                new_item.password = password;
             }
             3 => {
-                let website_url = Input::<String>::with_theme(&theme)
+                website_url = Input::<String>::with_theme(&theme)
                     .with_prompt("Enter the website URL")
                     .validate_with(|input: &String| -> Result<(), &str> {
                         if input.starts_with("http") {
@@ -64,12 +59,11 @@ pub fn update(filename: &str) -> Result<(), Box<dyn std::error::Error>> {
                     })
                     .default(item.website_url.clone())
                     .interact_text()?;
-                new_item.website_url = website_url;
             }
             _ => unreachable!(),
         }
     }
 
-    storage.items[index] = new_item;
+    storage.items[index] = Item::new(&title, &username, &password, &website_url);
     Ok(storage.save()?)
 }
