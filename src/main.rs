@@ -1,4 +1,5 @@
 mod cmd_create;
+mod cmd_remove;
 mod cmd_search;
 mod cmd_update;
 mod item;
@@ -7,13 +8,14 @@ mod storage;
 use dialoguer::{theme::ColorfulTheme, Select};
 
 use cmd_create::create;
+use cmd_remove::remove;
 use cmd_search::search;
 use cmd_update::update;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
 
-    let items = vec!["search", "create", "update", "delete"];
+    let items = vec!["Search", "Create", "Update", "Remove"];
 
     let selection = Select::with_theme(&theme)
         .with_prompt("Pick your operation")
@@ -26,7 +28,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "search" => search(),
         "create" => create(),
         "update" => update(),
-        "delete" => unimplemented!(),
+        "delete" => remove(),
         _ => unreachable!(),
     }
 }
