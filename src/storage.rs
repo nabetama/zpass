@@ -10,20 +10,29 @@ use crate::item::Item;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Storage {
     pub items: Vec<Item>,
+    metadata: Metadata,
 }
 
-const STORAGE_FILE: &str = ".zpass.json";
+#[derive(Debug, Serialize, Deserialize)]
+struct Metadata {
+    path: String,
+}
 
 impl Storage {
-    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn new(filename: &str) -> Result<Storage, Box<dyn std::error::Error>> {
         let file = OpenOptions::new()
             .create(true)
             .read(true)
             .append(true)
-            .open(STORAGE_FILE)?;
+            .open(filename)?;
 
         if file.metadata()?.len() == 0 {
-            return Ok(Self { items: Vec::new() });
+            return Ok(Self {
+                items: Vec::new(),
+                metadata: Metadata {
+                    path: filename.to_string(),
+                },
+            });
         }
 
         let reader = BufReader::new(file);
@@ -31,15 +40,15 @@ impl Storage {
     }
 
     fn write(&mut self) -> io::Result<()> {
-        let tmp_file = format!("{}.tmp", STORAGE_FILE);
+        let tmp_file = format!("{}.tmp", self.metadata.path);
         let w = OpenOptions::new()
             .create(true)
             .append(true)
             .open(&tmp_file)?;
 
         serde_json::to_writer_pretty(w, self)?;
-        remove_file(STORAGE_FILE)?;
-        rename(tmp_file, STORAGE_FILE)
+        remove_file(&self.metadata.path)?;
+        rename(tmp_file, &self.metadata.path)
     }
 
     pub fn save(&mut self) -> io::Result<()> {

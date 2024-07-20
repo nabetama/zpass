@@ -3,10 +3,10 @@ use dialoguer::{theme::ColorfulTheme, FuzzySelect};
 
 use crate::storage::Storage;
 
-pub fn search() -> Result<(), Box<dyn std::error::Error>> {
+pub fn search(storage: Storage) -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
+    let items = storage.items;
 
-    let items = Storage::new()?.items;
     let selection = FuzzySelect::with_theme(&theme)
         .with_prompt("Search: ")
         .default(0)
