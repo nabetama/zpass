@@ -28,3 +28,40 @@ impl std::fmt::Display for Item {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_new_item() {
+        let title = "title";
+        let username = "username";
+        let password = "password";
+        let website_url = "website_url";
+
+        let item = Item::new(title, username, password, website_url);
+
+        assert_eq!(item.title, title);
+        assert_eq!(item.username, username);
+        assert_eq!(item.password, password);
+        assert_eq!(item.website_url, website_url);
+    }
+
+    #[test]
+    fn test_display() {
+        let title = "title";
+        let username = "username";
+        let password = "password";
+        let website_url = "website_url";
+
+        let item = Item::new(title, username, password, website_url);
+
+        let expected = format!(
+            "Title: {}, Username: {}, Password: {} Website URL: {}",
+            title, username, password, website_url
+        );
+
+        assert_eq!(item.to_string(), expected);
+    }
+}

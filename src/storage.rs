@@ -59,3 +59,37 @@ impl Storage {
         self.items.push(item);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs::remove_file;
+
+    #[test]
+    fn test_storage_new() {
+        let filename = "test_storage_new.json";
+        let storage = Storage::new(filename).unwrap();
+        assert_eq!(storage.items.len(), 0);
+        remove_file(filename).unwrap();
+    }
+
+    #[test]
+    fn test_storage_save() {
+        let filename = "test_storage_save.json";
+        let mut storage = Storage::new(filename).unwrap();
+        storage.add_item(Item::new("title", "username", "password", "website"));
+        storage.save().unwrap();
+        let storage = Storage::new(filename).unwrap();
+        assert_eq!(storage.items.len(), 1);
+        remove_file(filename).unwrap();
+    }
+
+    #[test]
+    fn test_storage_add_item() {
+        let filename = "test_storage_add_item.json";
+        let mut storage = Storage::new(filename).unwrap();
+        storage.add_item(Item::new("title", "username", "password", "website"));
+        assert_eq!(storage.items.len(), 1);
+        remove_file(filename).unwrap();
+    }
+}
