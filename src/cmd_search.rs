@@ -3,17 +3,17 @@ use dialoguer::{theme::ColorfulTheme, FuzzySelect};
 
 use crate::storage::Storage;
 
-pub fn search() -> Result<(), Box<dyn std::error::Error>> {
+pub fn search(filename: &str) -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
+    let storage = Storage::new(filename)?;
 
-    let items = Storage::new()?.items;
     let selection = FuzzySelect::with_theme(&theme)
         .with_prompt("Search: ")
         .default(0)
-        .items(&items[..])
+        .items(&storage.items)
         .interact()?;
 
-    let item = &items[selection];
+    let item = &storage.items[selection];
 
     println!(
         "Title: {}\nUsername: {}\nPassword: {}\nWebsite URL: {}",

@@ -2,10 +2,10 @@ use dialoguer::{theme::ColorfulTheme, FuzzySelect, Input, MultiSelect, Password}
 
 use crate::{item::Item, storage::Storage};
 
-pub fn update() -> Result<(), Box<dyn std::error::Error>> {
+pub fn update(filename: &str) -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
+    let mut storage = Storage::new(filename)?;
 
-    let mut storage = Storage::new()?;
     let index = FuzzySelect::with_theme(&theme)
         .with_prompt("Which item would you like to update?: ")
         .default(0)

@@ -1,8 +1,8 @@
 use dialoguer::{theme::ColorfulTheme, Input, Password};
 
-use crate::{item::Item, storage};
+use crate::{item::Item, storage::Storage};
 
-pub fn create() -> Result<(), Box<dyn std::error::Error>> {
+pub fn create(filename: &str) -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
 
     let title = Input::<String>::with_theme(&theme)
@@ -32,7 +32,8 @@ pub fn create() -> Result<(), Box<dyn std::error::Error>> {
         })
         .interact_text()?;
 
-    let mut storage = storage::Storage::new()?;
+    let mut storage = Storage::new(filename)?;
+
     storage.add_item(Item::new(&title, &username, &password, &website_url));
     storage.save()?;
 
