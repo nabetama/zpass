@@ -1,5 +1,6 @@
 mod cmd_create;
 mod cmd_search;
+mod cmd_update;
 mod item;
 mod storage;
 
@@ -7,6 +8,7 @@ use dialoguer::{theme::ColorfulTheme, Select};
 
 use cmd_create::create;
 use cmd_search::search;
+use cmd_update::update;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
@@ -23,7 +25,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match items[selection] {
         "search" => search(),
         "create" => create(),
-        "update" => unimplemented!(),
+        "update" => update(),
         "delete" => unimplemented!(),
         _ => unreachable!(),
     }

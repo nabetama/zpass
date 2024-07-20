@@ -6,9 +6,7 @@ use crate::storage::Storage;
 pub fn search() -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
 
-    // storage から items をすべて取得する
     let items = Storage::new()?.items;
-    // 取得したitems に対して、テキストを入力してインクリメンタルサーチする
     let selection = FuzzySelect::with_theme(&theme)
         .with_prompt("Search: ")
         .default(0)
