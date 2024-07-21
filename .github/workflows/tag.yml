@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: salsify/action-detect-and-tag-new-version@v2
+        with:
+          version-command: |
+            echo "$(sed -n 's/^version = \"\(.*\)\"/\1/p' Cargo.toml)"
+        id: detect_tag
+      - uses: mathieudutour/github-tag-action@v6.2
+        with:
+          custom_tag: ${{ steps.detect_tag.outputs.current-version }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          if: ${{ steps.detect_tag.outputs.previous-version != steps.detect_tag.outputs.current-version }}
