@@ -1,0 +1,112 @@
+name: Release
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - {
+              os: ubuntu-latest,
+              target: x86_64-unknown-linux-gnu,
+              command: cargo,
+            }
+          - {
+              os: ubuntu-latest,
+              target: x86_64-unknown-linux-musl,
+              command: cross,
+            }
+          - {
+              os: ubuntu-latest,
+              target: armv7-unknown-linux-gnueabihf,
+              command: cross,
+            }
+          - {
+              os: ubuntu-latest,
+              target: armv7-unknown-linux-musleabihf,
+              command: cross,
+            }
+          - {
+              os: ubuntu-latest,
+              target: aarch64-unknown-linux-gnu,
+              command: cross,
+            }
+          - {
+              os: ubuntu-latest,
+              target: aarch64-unknown-linux-musl,
+              command: cross,
+            }
+          - { os: macos-latest, target: x86_64-apple-darwin, command: cargo }
+          - { os: macos-latest, target: aarch64-apple-darwin, command: cargo }
+          - {
+              os: windows-latest,
+              target: x86_64-pc-windows-msvc,
+              command: cargo,
+            }
+    steps:
+      - name: Install Act dependencies
+        if: ${{ env.ACT }}
+        run: |
+          apt-get update && apt-get install sudo -y
+
+      - name: Set the package name as an environment variable
+        shell: bash
+        run: |
+          echo "PACKAGE_NAME=$(sed -n 's/^name = \"\(.*\)\"/\1/p' Cargo.toml)" >> $GITHUB_ENV
+
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install curl build-essential -y
+
+      - name: Build
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.job.target }}
+
+      - name: Install Cross
+        if: ${{ matrix.job.command == 'cross' }}
+        shell: bash
+        run: |
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+          cargo binstall --no-confirm cross
+
+      - name: Build binary
+        run: |
+          ${{ matrix.job.command }} build --verbose --locked --release --target ${{ matrix.job.target }}
+
+      - name: Release binary
+        shell: bash
+        run: |
+          BIN_SUFFIX=""
+          if [[ "${{ matrix.job.os }}" == "windows-latest" ]]; then
+              BIN_SUFFIX=".exe"
+          fi
+
+          BIN_OUTPUT="target/${{ matrix.job.target }}/release/${PACKAGE_NAME}${BIN_SUFFIX}"
+          BIN_RELEASE_VERSIONED="${PACKAGE_NAME}-${{ github.ref_name }}-${{ matrix.job.target }}${BIN_SUFFIX}"
+
+          # Move the built binary where you want it
+          mv "${BIN_OUTPUT}" "/target/${{ github.ref_name }}/${BIN_RELEASE_VERSIONED}"
