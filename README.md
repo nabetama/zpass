@@ -4,14 +4,8 @@ Stand-alone password manager that is easy to use in your terminal
 
 ## Usage
 
-```sh
-$ ./target/release/zpass
-? Pick your operation ›
-❯ Search
-  Create
-  Update
-  Remove
-```
+![after](https://github.com/user-attachments/assets/4023e730-2450-4e58-ac4c-cb9829501119)
+
 
 # Author
 
