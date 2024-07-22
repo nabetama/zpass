@@ -26,8 +26,8 @@ impl std::fmt::Display for Item {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Title: {}, Username: {}, Password: {} Website URL: {}",
-            self.title, self.username, self.password, self.website_url
+            "Title: {}, Username: {}, Password: ******** Website URL: {}",
+            self.title, self.username, self.website_url
         )
     }
 }
@@ -61,8 +61,8 @@ mod tests {
         let item = Item::new(title, username, password, website_url);
 
         let expected = format!(
-            "Title: {}, Username: {}, Password: {} Website URL: {}",
-            title, username, password, website_url
+            "Title: {}, Username: {}, Password: ******** Website URL: {}",
+            title, username, website_url
         );
 
         assert_eq!(item.to_string(), expected);

@@ -12,3 +12,11 @@ $ ./target/release/zpass
   Update
   Remove
 ```
+
+# Author
+
+Mao Nabeta <@nabetama>
+
+# LICENSE
+
+Apache License Version 2.0
