@@ -11,7 +11,7 @@ homepage = "https://github.com/nabetama/zpass"
 license = "Apache-2.0"
 name = "zpass"
 repository = "https://github.com/nabetama/zpass"
-version = "0.1.1"
+version = "0.1.2"
 
 [dependencies]
 chrono = {version = "0.4.38", features = ["serde"]}

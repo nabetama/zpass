@@ -53,13 +53,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_prompt("Pick your operation")
         .default(0)
         .items(&items)
-        .interact()?;
-    println!("You have selected: {}", items[selection]);
+        .interact_opt()?;
 
-    match items[selection] {
-        Operation::Search => search(&filename),
-        Operation::Create => create(&filename),
-        Operation::Update => update(&filename),
-        Operation::Remove => remove(&filename),
+    match selection {
+        Some(index) => {
+            println!("You have selected: {}", items[index]);
+            match items[index] {
+                Operation::Search => search(&filename),
+                Operation::Create => create(&filename),
+                Operation::Update => update(&filename),
+                Operation::Remove => remove(&filename),
+            }
+        }
+        None => {
+            println!("No operation selected");
+            Ok(())
+        }
     }
 }

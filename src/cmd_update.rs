@@ -6,6 +6,11 @@ pub fn update(filename: &str) -> Result<(), Box<dyn std::error::Error>> {
     let theme = ColorfulTheme::default();
     let mut storage = Storage::new(filename)?;
 
+    if storage.items.is_empty() {
+        println!("No items found. Please create some passwords first.");
+        return Ok(());
+    }
+
     let index = FuzzySelect::with_theme(&theme)
         .with_prompt("Which item would you like to update?: ")
         .default(0)
